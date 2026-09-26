@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chara Maker · Smash Ultimate</title>
+<link rel="stylesheet" href="/web/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">◐</span> CHARA <b>MAKER</b></div>
+  <nav class="tabs">
+    <button data-view="inicio" class="on">1 · Imagen</button>
+    <button data-view="recorte" disabled>2 · Recorte</button>
+    <button data-view="charas" disabled>3 · Charas</button>
+    <button data-view="ajustes">Ajustes y calibración</button>
+  </nav>
+  <div class="project-pill" id="projectPill" hidden></div>
+</header>
+
+<main>
+  <!-- ===================== 1. IMAGEN ===================== -->
+  <section class="view on" id="view-inicio">
+    <div class="grid2">
+      <div class="panel">
+        <h2>Nuevo personaje</h2>
+        <label class="drop" id="drop">
+          <input type="file" id="fileInput" accept="image/*" hidden>
+          <img id="dropPreview" alt="" hidden>
+          <span id="dropText"><b>Arrastra aquí el PNG del personaje</b><br>o haz clic para elegirlo</span>
+        </label>
+        <div class="row">
+          <label class="field grow"><span>Nombre interno del luchador</span>
+            <input id="fighter" list="fighterList" placeholder="mario, pikachu, dragon_king…" autocomplete="off">
+            <datalist id="fighterList"></datalist>
+          </label>
+          <label class="field"><span>Slot (color)</span>
+            <input id="slot" type="number" min="0" max="255" value="0">
+          </label>
+        </div>
+        <p class="help">El nombre interno es el que usa el juego en los archivos (Mario = <code>mario</code>, Bowser = <code>koopa</code>…). Los archivos saldrán como <code>chara_3_<i>nombre</i>_00.bntx</code>.</p>
+        <div class="field"><span>Charas que quieres crear</span><div class="chips" id="charaChecks"></div></div>
+        <div class="row">
+          <label class="field"><span>Fondo</span>
+            <select id="bgMode">
+              <option value="auto">Quitar si la imagen no es transparente</option>
+              <option value="si">Quitar siempre</option>
+              <option value="no">No quitar (ya es transparente)</option>
+            </select>
+          </label>
+          <label class="field grow"><span>Modelo de recorte</span><select id="bgModel"></select></label>
+        </div>
+        <button class="btn big" id="createBtn">Crear charas</button>
+        <p class="help">La primera vez que quites un fondo se descarga el modelo de IA (≈170 MB). Después funciona sin internet.</p>
+      </div>
+      <div class="panel">
+        <h2>Proyectos recientes</h2>
+        <div id="projectList" class="plist"><p class="muted">Todavía no hay proyectos.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2. RECORTE ===================== -->
+  <section class="view" id="view-recorte">
+    <div class="editor">
+      <div class="toolbar">
+        <div class="seg" id="maskTools">
+          <button data-tool="erase" class="on" title="Borrar (B)">✖ Borrar</button>
+          <button data-tool="restore" title="Recuperar (R)">✚ Recuperar</button>
+          <button data-tool="head" title="Marcar cabeza (H)">◎ Cabeza</button>
+          <button data-tool="pan" title="Mover vista (espacio)">✋ Mover</button>
+        </div>
+        <label class="mini">Pincel <input type="range" id="brushSize" min="2" max="300" value="40"><output id="brushSizeOut">40</output></label>
+        <label class="mini">Dureza <input type="range" id="brushHard" min="0" max="100" value="70"></label>
+        <div class="seg" id="maskView">
+          <button data-bg="checker" class="on">Cuadros</button>
+          <button data-bg="red">Máscara</button>
+          <button data-bg="black">Negro</button>
+          <button data-bg="white">Blanco</button>
+        </div>
+        <button class="btn ghost" id="undoMask" title="Ctrl+Z">↶</button>
+        <button class="btn ghost" id="redoMask" title="Ctrl+Y">↷</button>
+        <button class="btn ghost" id="fitMask">Encajar</button>
+      </div>
+      <div class="stage" id="maskStage"><canvas id="maskCanvas"></canvas></div>
+      <p class="help center">Rueda: zoom · Espacio + arrastrar: mover · B / R / H: herramientas · Con "Cabeza", arrastra desde el centro de la cara hasta el borde de la cabeza.</p>
+    </div>
+    <aside class="side">
+      <div class="panel">
+        <h3>Corregir el recorte</h3>
+        <button class="btn wide" id="saveMask">Guardar retoques del pincel</button>
+        <div class="btns">
+          <button class="btn ghost" data-op='{"fill_holes":true}'>Rellenar huecos</button>
+          <button class="btn ghost" data-op='{"remove_islands":0.02}'>Quitar trozos sueltos</button>
+          <button class="btn ghost" data-op='{"grow":-1}'>Contraer borde 1 px</button>
+          <button class="btn ghost" data-op='{"grow":1}'>Expandir borde 1 px</button>
+          <button class="btn ghost" data-op='{"feather":1}'>Suavizar borde</button>
+          <button class="btn ghost" data-op='{"hard":0.6}'>Endurecer borde</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Volver a quitar el fondo</h3>
+        <select id="redoModel"></select>
+        <div class="btns">
+          <button class="btn ghost" id="redoBg">Rehacer con este modelo</button>
+          <button class="btn ghost" id="noBg">Usar sin quitar fondo</button>
+        </div>
+        <p class="help" id="bgInfo"></p>
+      </div>
+      <div class="panel">
+        <h3>Cabeza</h3>
+        <p class="help" id="headInfo"></p>
+        <button class="btn ghost wide" id="headAuto">Detectar automáticamente</button>
+      </div>
+      <button class="btn big wide" id="toCharas">Siguiente: encuadrar charas →</button>
+    </aside>
+  </section>
+
+  <!-- ===================== 3. CHARAS ===================== -->
+  <section class="view" id="view-charas">
+    <div class="chara-strip" id="charaStrip"></div>
+    <div class="chara-work">
+      <div class="editor">
+        <div class="chara-title">
+          <div><small id="charaKicker"></small><h2 id="charaName"></h2><p class="muted" id="charaUse"></p></div>
+          <div class="nav2">
+            <button class="btn ghost" id="prevChara">← Anterior</button>
+            <button class="btn ghost" id="nextChara">Siguiente →</button>
+          </div>
+        </div>
+        <div class="stage chara-stage" id="charaStage"><canvas id="charaCanvas"></canvas></div>
+        <div class="toolbar">
+          <div class="seg" id="charaBg">
+            <button data-bg="checker" class="on">Cuadros</button>
+            <button data-bg="dark">Oscuro</button>
+            <button data-bg="light">Claro</button>
+          </div>
+          <label class="mini"><input type="checkbox" id="showGuide" checked> Guía</label>
+          <label class="mini"><input type="checkbox" id="showRef"> Referencia original <input type="range" id="refOpacity" min="0" max="100" value="45"></label>
+          <label class="mini"><input type="checkbox" id="showOutside" checked> Ver lo que queda fuera</label>
+        </div>
+        <p class="help center">Arrastra para mover · Rueda para acercar/alejar · Flechas: mover 1 px (Mayús: 10 px) · +/-: zoom</p>
+      </div>
+      <aside class="side">
+        <div class="panel result">
+          <h3>Resultado exacto <small id="resSize"></small></h3>
+          <div class="result-imgs">
+            <div class="res-big"><img id="resultImg" alt=""></div>
+            <div class="res-real"><img id="resultReal" alt=""><small>tamaño real</small></div>
+          </div>
+          <p class="filename" id="fileName"></p>
+          <div class="btns">
+            <button class="btn" id="dlBntx">⬇ Descargar BNTX</button>
+            <button class="btn ghost" id="dlPng">PNG</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Proporción y posición</h3>
+          <label class="field"><span>Tamaño <output id="zoomOut"></output></span><input type="range" id="zoomRange" min="-500" max="500" value="0"></label>
+          <div class="row">
+            <label class="field"><span>X</span><input type="number" id="posX" step="1"></label>
+            <label class="field"><span>Y</span><input type="number" id="posY" step="1"></label>
+            <label class="field"><span>Giro °</span><input type="number" id="rot" step="0.5" value="0"></label>
+          </div>
+          <div class="btns">
+            <button class="btn ghost" id="flipBtn">⇋ Voltear</button>
+            <button class="btn ghost" id="autoBtn">Encuadre automático</button>
+            <button class="btn ghost" id="copyPrev">Copiar del anterior</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Sombra</h3>
+          <div class="row">
+            <label class="field grow"><span>Tipo</span>
+              <select id="shMode"><option value="contorno">Contorno (como en el juego)</option><option value="caida">Sombra desplazada</option><option value="ninguna">Sin sombra</option></select>
+            </label>
+            <label class="field"><span>Color</span><input type="color" id="shColor" value="#000000"></label>
+          </div>
+          <label class="field"><span>Opacidad <output id="shOpOut"></output></span><input type="range" id="shOp" min="0" max="100"></label>
+          <label class="field"><span>Grosor <output id="shThOut"></output></span><input type="range" id="shTh" min="0" max="120"></label>
+          <label class="field"><span>Desenfoque <output id="shBlOut"></output></span><input type="range" id="shBl" min="0" max="120"></label>
+          <div class="row">
+            <label class="field"><span>Desplazar X %</span><input type="number" id="shDx" step="0.5"></label>
+            <label class="field"><span>Desplazar Y %</span><input type="number" id="shDy" step="0.5"></label>
+          </div>
+          <button class="btn ghost wide" id="shDefault">Sombra por defecto de este chara</button>
+        </div>
+        <div class="btns">
+          <button class="btn big wide" id="dlZip">⬇ Descargar todos (ZIP listo para el mod)</button>
+          <a class="btn ghost wide" id="viewSheet" target="_blank">Ver hoja con todos</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===================== AJUSTES ===================== -->
+  <section class="view" id="view-ajustes">
+    <div class="panel">
+      <h2>Calibrar con archivos originales</h2>
+      <p>Sube BNTX originales del juego o de un mod (<code>chara_3_mario_00.bntx</code>…) y el programa copiará sus <b>medidas, formato y mipmaps exactos</b>. También guarda una imagen de referencia para comparar la proporción al encuadrar.</p>
+      <div class="row">
+        <label class="btn ghost"><input type="file" id="calFiles" multiple accept=".bntx" hidden>Elegir BNTX…</label>
+        <label class="field grow"><span>…o la ruta de una carpeta de tu PC (se buscan todos los chara_*.bntx dentro)</span><input id="calFolder" placeholder="C:\Users\tu\Desktop\mods\ui\replace\chara"></label>
+        <button class="btn" id="calBtn">Calibrar</button>
+      </div>
+      <pre class="log" id="calLog" hidden></pre>
+    </div>
+    <div class="panel">
+      <h2>Configuración de cada chara</h2>
+      <div class="table-wrap"><table class="ptable" id="presetTable"></table></div>
+      <button class="btn" id="savePresets">Guardar configuración</button>
+    </div>
+    <div class="panel">
+      <h2>Ver un BNTX</h2>
+      <label class="btn ghost"><input type="file" id="viewBntx" accept=".bntx" hidden>Abrir BNTX…</label>
+      <div class="bntx-view" id="bntxView"></div>
+    </div>
+  </section>
+</main>
+
+<div class="busy" id="busy" hidden><div class="spinner"></div><p id="busyText">Trabajando…</p></div>
+<div class="toast" id="toast" hidden></div>
+<script src="/web/app.js"></script>
+</body>
+</html>

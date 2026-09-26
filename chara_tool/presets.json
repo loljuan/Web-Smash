@@ -1,0 +1,109 @@
+{
+  "_nota": "Configuración de cada chara. Puedes editarla aquí o desde la pestaña Ajustes. 'verificado': true significa que las medidas se han comprobado con un archivo original del juego (usa 'Calibrar' para hacerlo con tus archivos). Tamaños de sombra en % del lado más corto del chara.",
+  "charas": {
+    "0": {
+      "nombre": "Retrato de récord",
+      "uso": "Registros e historial del luchador. Cara en un cuadrado.",
+      "width": 128,
+      "height": 128,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "cara",
+      "guia": "circulo",
+      "alts": true,
+      "sombra": { "modo": "contorno", "opacidad": 0.55, "grosor": 2.5, "desenfoque": 2.0, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    },
+    "1": {
+      "nombre": "Retrato de selección (CSS)",
+      "uso": "Panel del jugador en la pantalla de selección y pósters del Ring. Personaje grande, abajo a la derecha.",
+      "width": 512,
+      "height": 512,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "cuerpo_abajo_derecha",
+      "guia": "ninguna",
+      "alts": true,
+      "sombra": { "modo": "contorno", "opacidad": 0.5, "grosor": 1.2, "desenfoque": 1.2, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    },
+    "2": {
+      "nombre": "Icono de stock",
+      "uso": "Vidas en combate. Icono cuadrado de la cabeza con contorno oscuro semitransparente.",
+      "width": 64,
+      "height": 64,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "cara_stock",
+      "guia": "circulo",
+      "alts": true,
+      "sombra": { "modo": "contorno", "opacidad": 0.75, "grosor": 4.5, "desenfoque": 3.0, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": true
+    },
+    "3": {
+      "nombre": "Retrato de VS y resultados",
+      "uso": "Pantalla de VS y de resultados. Personaje entero, abajo a la izquierda.",
+      "width": 512,
+      "height": 512,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "cuerpo_abajo_izquierda",
+      "guia": "ninguna",
+      "alts": true,
+      "sombra": { "modo": "contorno", "opacidad": 0.5, "grosor": 1.2, "desenfoque": 1.2, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    },
+    "4": {
+      "nombre": "Retrato de combate",
+      "uso": "Marcador de daño en combate. Cara dentro de un rombo.",
+      "width": 128,
+      "height": 128,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "cara",
+      "guia": "rombo",
+      "alts": true,
+      "sombra": { "modo": "contorno", "opacidad": 0.55, "grosor": 2.5, "desenfoque": 2.0, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    },
+    "5": {
+      "nombre": "Retrato de espíritu",
+      "uso": "Espíritu del luchador. Solo existe el _00 (sin alts).",
+      "width": 256,
+      "height": 256,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "cuerpo_centro",
+      "guia": "ninguna",
+      "alts": false,
+      "sombra": { "modo": "contorno", "opacidad": 0.5, "grosor": 1.5, "desenfoque": 1.5, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    },
+    "6": {
+      "nombre": "Retrato de Smash Final",
+      "uso": "Corte de los ojos al lanzar el Smash Final. Rectángulo horizontal 2:1.",
+      "width": 512,
+      "height": 256,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "ojos",
+      "guia": "franja_ojos",
+      "alts": true,
+      "sombra": { "modo": "ninguna", "opacidad": 0.5, "grosor": 1.5, "desenfoque": 1.5, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    },
+    "7": {
+      "nombre": "Icono de selección (CSS)",
+      "uso": "Casilla del luchador en la cuadrícula de selección. Solo existe el _00 (sin alts).",
+      "width": 256,
+      "height": 152,
+      "format": "BC7RgbaUnorm",
+      "mipmaps": 1,
+      "encuadre": "casilla",
+      "guia": "ninguna",
+      "alts": false,
+      "sombra": { "modo": "contorno", "opacidad": 0.5, "grosor": 1.5, "desenfoque": 1.5, "dx": 0, "dy": 0, "color": "#000000" },
+      "verificado": false
+    }
+  }
+}

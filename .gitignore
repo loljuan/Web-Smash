@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+proyectos/
+chara_tool/referencias/
+tools/charatex/target/
