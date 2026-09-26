@@ -7,7 +7,9 @@ imágenes de vista previa que puedes abrir para revisar el resultado.
 
 ## Preparación (una vez)
 
-- Si no existe `.venv`, pide al usuario que haga doble clic en `INICIAR.bat`, o hazlo tú con:
+- Si no existe `.venv`, ejecuta `INICIAR.bat` una vez (o pide al usuario que le dé doble clic). Si
+  no hay Python en el PC, descarga `uv` en `tools\uv\` y este instala un Python 3.12 propio en
+  `tools\python\`, sin tocar el sistema. Con Python ya instalado equivale a:
   `py -3.12 -m venv .venv && .venv\Scripts\python -m pip install -r requirements.txt`
 - Usa siempre `chara.bat …` (o `.venv\Scripts\python chara.py …`).
 - El conversor BNTX es `bin\charatex.exe`. En Linux o macOS: `bin/charatex-linux` o compílalo con

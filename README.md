@@ -12,7 +12,7 @@ Programa para Windows que convierte **un PNG de un personaje** en sus **charas d
 1. Descarga el repositorio: **Code → Download ZIP**, y descomprímelo.
 2. Doble clic en **`INICIAR.bat`**.
    - La primera vez instala todo lo necesario (unos minutos).
-   - Si no tienes Python, se abre la página para instalar **Python 3.12**. En el instalador marca **"Add python.exe to PATH"**.
+   - No hace falta tener Python: si no lo encuentra, descarga uno propio dentro de la carpeta del programa.
 3. Se abre el navegador en `http://127.0.0.1:7860`. Para apagarlo, cierra la ventana negra.
 
 La primera vez que quites un fondo se descarga el modelo de IA (≈170 MB). A partir de ahí funciona sin internet.
